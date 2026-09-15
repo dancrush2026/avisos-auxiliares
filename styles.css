@@ -392,6 +392,9 @@ input:focus, textarea:focus {
 }
 
 .document-wa {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 1080px;
     height: 1350px;
     background: white;
