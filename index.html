@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Avisos Auxiliares - Secundaria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>AVISOS AUXILIARES</h1>
+            <p>I.E. Francisco Bolognesi - Secundaria</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Pantalla de Selección de Documento -->
+        <section id="doc-selection-screen" class="screen active">
+            <h2 class="section-title">¿Qué deseas reportar hoy?</h2>
+            <div class="card-grid">
+                <div class="doc-card evasion" data-type="evasion">
+                    <div class="icon">🏃‍♂️</div>
+                    <h3>Evasión de Clases</h3>
+                    <p>Alumnos que escaparon</p>
+                </div>
+                <div class="doc-card salida" data-type="salida-temprana">
+                    <div class="icon">🕒</div>
+                    <h3>Salida Temprana</h3>
+                    <p>Retiro por comisión docente</p>
+                </div>
+                <div class="doc-card salud" data-type="salud">
+                    <div class="icon">🏥</div>
+                    <h3>Mal de Salud</h3>
+                    <p>Consideración médica</p>
+                </div>
+                <div class="doc-card disciplina" data-type="disciplina">
+                    <div class="icon">👕</div>
+                    <h3>Incumplimiento</h3>
+                    <p>Buzos y otras faltas</p>
+                </div>
+                <div class="doc-card citacion" data-type="citacion">
+                    <div class="icon">📅</div>
+                    <h3>Citación a Padres</h3>
+                    <p>Convocar apoderados</p>
+                </div>
+                <div class="doc-card reporte" data-type="reporte-evidencia">
+                    <div class="icon">📸</div>
+                    <h3>Reporte / Asistencia</h3>
+                    <p>Pintas, daños o listas con foto</p>
+                </div>
+            </div>
+            
+            <div class="history-section">
+                <h3>Historial de Comunicados</h3>
+                <div id="history-list"></div>
+            </div>
+        </section>
+
+        <!-- Pantalla de Edición -->
+        <section id="editor-screen" class="screen hidden">
+            <button id="btn-back" class="btn-back">
+                <i>←</i> Volver al inicio
+            </button>
+            
+            <div class="layout-grid">
+                <!-- Columna Izquierda: Formulario -->
+                <div class="form-column">
+                    <div class="form-header">
+                        <div class="icon" id="form-icon">📝</div>
+                        <h2 id="current-doc-title">Nuevo Aviso</h2>
+                    </div>
+
+                    <!-- Grado y Sección (Común) -->
+                    <div class="form-group row-3">
+                        <div>
+                            <label>Grado</label>
+                            <select id="sel-grado">
+                                <option value="1ro">1ro</option>
+                                <option value="2do">2do</option>
+                                <option value="3ro">3ro</option>
+                                <option value="4to">4to</option>
+                                <option value="5to">5to</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Sección</label>
+                            <select id="sel-seccion">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                                <option value="I">I</option>
+                                <option value="J">J</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Fecha</label>
+                            <input type="date" id="fecha">
+                        </div>
+                    </div>
+
+                    <!-- Lista de Estudiantes -->
+                    <div id="estudiantes-section" class="form-group dynamic-section">
+                        <label>Lista de Estudiantes</label>
+                        <div class="student-input-group">
+                            <input type="text" id="nuevo-estudiante" placeholder="Apellidos y Nombres">
+                            <button type="button" id="btn-add-student" class="btn-icon">+</button>
+                        </div>
+                        <ul id="lista-estudiantes" class="student-list"></ul>
+                    </div>
+
+                    <!-- Detalles Específicos -->
+                    <div class="form-group dynamic-section" id="detalles-section">
+                        <label id="lbl-detalles">Detalles adicionales</label>
+                        <textarea id="detalles-texto" rows="3" placeholder="Profesor a cargo, motivo, curso..."></textarea>
+                    </div>
+
+                    <!-- Citación: Fecha y Hora de la cita -->
+                    <div class="form-group row-2 dynamic-section hidden" id="cita-section">
+                        <div>
+                            <label>Fecha de Cita</label>
+                            <input type="date" id="fecha-cita">
+                        </div>
+                        <div>
+                            <label>Hora de Cita</label>
+                            <input type="time" id="hora-cita">
+                        </div>
+                    </div>
+
+                    <!-- Evidencia Fotográfica -->
+                    <div class="form-group dynamic-section hidden" id="evidencia-section">
+                        <label>Foto de Evidencia (Opcional)</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="foto-evidencia" accept="image/*" capture="environment">
+                            <label for="foto-evidencia" class="file-upload-label">
+                                <span class="upload-icon">📷</span>
+                                <span>Tomar o subir foto</span>
+                            </label>
+                        </div>
+                        <div class="preview-evidencia-container">
+                            <img id="preview-evidencia" src="" alt="Vista previa" style="display:none;">
+                            <button type="button" id="btn-remove-foto" class="btn-text-danger hidden">Eliminar foto</button>
+                        </div>
+                    </div>
+
+                    <!-- Diseño Selector -->
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label>Color de Tarjeta</label>
+                        <div class="designs-grid" id="designs-selector">
+                            <!-- Generado por JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Vista Previa -->
+                <div class="preview-column">
+                    <label class="preview-label">Vista Previa (Formato WhatsApp)</label>
+                    <div class="preview-container">
+                        <!-- Vista WhatsApp Story/Post (800x1000 base) -->
+                        <div id="preview-wa" class="preview-wrapper active">
+                            <div id="doc-wa" class="document-wa">
+                                <!-- Contenido generado -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button id="btn-share-wa" class="btn-primary btn-large">
+                            <span class="icon">💬</span> COMPARTIR EN WHATSAPP
+                        </button>
+                        <div class="btn-group">
+                            <button id="btn-dl-jpg" class="btn-secondary">
+                                <span class="icon">📥</span> GUARDAR IMAGEN
+                            </button>
+                            <button id="btn-save" class="btn-secondary">
+                                <span class="icon">💾</span> BORRADOR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="db.js"></script>
+    <script src="logo.js"></script>
+    <script src="templates.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
